@@ -4,19 +4,21 @@ const BASE_URL = 'https://pixabay.com/api/';
 const IMAGE_TYPE = 'photo';
 const ORIENTATION = 'horizontal';
 const SAFESEARCH = true;
+// const PER_PAGE = 15;
 
-export function getImages(searchText) {
-  const QUERY = encodeURIComponent(searchText);
-  const requestURL = `${BASE_URL}?key=${KEY}&q=${QUERY}&image_type=${IMAGE_TYPE}&orientation=${ORIENTATION}&safesearch=${SAFESEARCH}`;
+import axios from 'axios';
 
-  return fetch(requestURL)
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Image error');
-      }
-      return response.json();
-    })
-    .catch(error => {
-      throw new Error('Error while fetching images from pixabay', error);
-    });
+export async function getImages(searchText) {
+  try {
+    const QUERY = encodeURIComponent(searchText);
+    const requestURL = `${BASE_URL}?key=${KEY}&q=${QUERY}&image_type=${IMAGE_TYPE}&orientation=${ORIENTATION}&safesearch=${SAFESEARCH}`;
+
+    const response = await axios.get(requestURL);
+    if (response.status !== 200) {
+      throw new Error('Image error');
+    }
+    return response.data;
+  } catch (error) {
+    throw new Error('Error while fetching images from pixabay', error);
+  }
 }

@@ -11,8 +11,9 @@ const form = document.querySelector('#search-form');
 const input = document.querySelector('#search-input');
 const gallery = document.querySelector('.gallery');
 const loader = document.getElementById('loader');
+const loadMoreBtn = document.querySelector('.btn-load-more');
 
-form.addEventListener('submit', function (event) {
+form.addEventListener('submit', async function (event) {
   event.preventDefault();
 
   const searchText = input.value.trim();
@@ -23,22 +24,26 @@ form.addEventListener('submit', function (event) {
   }
   loader.classList.remove('is-hidden');
 
-  getImages(searchText)
-    .then(data => {
-      if (data.hits.length === 0) {
-        displayErrorMessage(
-          'Sorry, there are no images matching your search query. Please try again!'
-        );
-        return;
-      }
-      displayImages(data.hits, gallery);
-      input.value = '';
-    })
-    .catch(error => {
-      console.error('Error during search:', error);
-      displayErrorMessage('Error');
-    })
-    .finally(() => {
-      loader.classList.add('is-hidden');
-    });
+  try {
+    const data = await getImages(searchText);
+    if (data.hits.length === 0) {
+      displayErrorMessage(
+        'Sorry, there are no images matching your search query. Please try again!'
+      );
+      return;
+    }
+    displayImages(data.hits, gallery);
+    input.value = '';
+  } catch (error) {
+    console.error('Error during search:', error);
+    displayErrorMessage('Error during search');
+  } finally {
+    loader.classList.add('is-hidden');
+  }
 });
+
+// loadMoreBtn.addEventListener('click', onLoadMore);
+
+// function onLoadMore() {
+//   loader.classList.remove('is-hidden');
+// }
