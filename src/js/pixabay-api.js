@@ -4,14 +4,14 @@ const BASE_URL = 'https://pixabay.com/api/';
 const IMAGE_TYPE = 'photo';
 const ORIENTATION = 'horizontal';
 const SAFESEARCH = true;
-// const PER_PAGE = 15;
+const PER_PAGE = 15;
 
 import axios from 'axios';
 
-export async function getImages(searchText) {
+export async function getImages(searchText, page = 1) {
   try {
     const QUERY = encodeURIComponent(searchText);
-    const requestURL = `${BASE_URL}?key=${KEY}&q=${QUERY}&image_type=${IMAGE_TYPE}&orientation=${ORIENTATION}&safesearch=${SAFESEARCH}`;
+    const requestURL = `${BASE_URL}?key=${KEY}&q=${QUERY}&image_type=${IMAGE_TYPE}&orientation=${ORIENTATION}&safesearch=${SAFESEARCH}&per_page=${PER_PAGE}&page=${page}`;
 
     const response = await axios.get(requestURL);
     if (response.status !== 200) {
