@@ -137,3 +137,21 @@
     box-shadow: 10px 0 white, 20px 0 white;
   }
 }
+
+.btn-load-more {
+  display: block;
+  width: 200px;
+  margin: 20px auto;
+  padding: 10px 20px;
+  text-align: center;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-load-more:hover {
+  background-color: #0056b3;
+}
