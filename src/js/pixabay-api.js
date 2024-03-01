@@ -4,7 +4,7 @@ const BASE_URL = 'https://pixabay.com/api/';
 const IMAGE_TYPE = 'photo';
 const ORIENTATION = 'horizontal';
 const SAFESEARCH = true;
-const PER_PAGE = 15;
+export const PER_PAGE = 15;
 
 import axios from 'axios';
 

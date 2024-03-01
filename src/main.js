@@ -4,6 +4,7 @@ import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { getImages } from './js/pixabay-api.js';
 import { displayImages, displayErrorMessage } from './js/render-functions.js';
+import { PER_PAGE } from './js/pixabay-api.js';
 
 const form = document.querySelector('#search-form');
 const input = document.querySelector('#search-input');
@@ -17,12 +18,13 @@ form.addEventListener('submit', async function (event) {
   event.preventDefault();
 
   searchText = input.value.trim();
+  console.log(searchText);
 
   if (searchText === '') {
     displayErrorMessage('Please fill input');
     return;
   }
-
+  input.value = '';
   loader.classList.remove('is-hidden');
 
   try {
@@ -31,26 +33,42 @@ form.addEventListener('submit', async function (event) {
     handleImageData(data);
   } catch (error) {
     console.error('Error during search:', error);
-    displayErrorMessage('Error');
+    displayErrorMessage('Error during search');
   } finally {
     loader.classList.add('is-hidden');
   }
 });
 
 loadMoreBtn.addEventListener('click', async function () {
-  loader.classList.remove('is-hidden');
+  const loadMoreLoader = document.getElementById('load-more-loader');
+  loadMoreLoader.classList.remove('is-hidden');
+  loadMoreBtn.disabled = true;
 
   try {
     const data = await getImages(searchText, currentPage + 1);
     currentPage++;
     handleImageData(data);
+
+    if (currentPage * PER_PAGE >= data.totalHits) {
+      loadMoreBtn.classList.add('is-hidden');
+      displayEndMessage();
+    }
   } catch (error) {
     console.error('Error during loading more images:', error);
     displayErrorMessage('Error loading more images');
   } finally {
-    loader.classList.add('is-hidden');
+    loadMoreLoader.classList.add('is-hidden');
+    loadMoreBtn.disabled = false;
   }
 });
+
+function displayEndMessage() {
+  iziToast.info({
+    title: '',
+    message: "We're sorry, but you've reached the end of search results.",
+    position: 'topRight',
+  });
+}
 
 function handleImageData(data) {
   if (data.hits.length === 0) {
@@ -65,4 +83,15 @@ function handleImageData(data) {
   }
 
   displayImages(data.hits, gallery);
+
+  displayImages(data.hits, document.querySelector('.gallery'));
+
+  const galleryItemHeight = document
+    .querySelector('.card')
+    .getBoundingClientRect().height;
+
+  window.scrollBy({
+    top: 2 * galleryItemHeight,
+    behavior: 'smooth',
+  });
 }
