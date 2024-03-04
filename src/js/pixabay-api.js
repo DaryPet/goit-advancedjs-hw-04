@@ -13,7 +13,12 @@ export async function getImages(searchText, page = 1) {
     const QUERY = encodeURIComponent(searchText);
     const requestURL = `${BASE_URL}?key=${KEY}&q=${QUERY}&image_type=${IMAGE_TYPE}&orientation=${ORIENTATION}&safesearch=${SAFESEARCH}&per_page=${PER_PAGE}&page=${page}`;
 
+    console.log('Request URL:', requestURL);
+
     const response = await axios.get(requestURL);
+
+    console.log('Response data:', response.data);
+
     if (response.status !== 200) {
       throw new Error('Image error');
     }

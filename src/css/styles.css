@@ -29,8 +29,10 @@
   flex-wrap: wrap;
   gap: 24px;
   column-gap: 24px;
-  width: 1128px;
-  padding-left: 40px;
+  /* width: 1128px;
+  padding-left: 40px; */
+  width: calc(100% - 80px); /* Ширина - 40px на левый и правый отступ */
+  margin: 0 auto; /* Центрируем галерею */
 }
 
 .card {

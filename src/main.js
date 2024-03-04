@@ -18,7 +18,6 @@ form.addEventListener('submit', async function (event) {
   event.preventDefault();
 
   searchText = input.value.trim();
-  console.log(searchText);
 
   if (searchText === '') {
     displayErrorMessage('Please fill input');
@@ -26,6 +25,8 @@ form.addEventListener('submit', async function (event) {
   }
   input.value = '';
   loader.classList.remove('is-hidden');
+
+  gallery.innerHTML = '';
 
   try {
     const data = await getImages(searchText, 1);
@@ -40,9 +41,21 @@ form.addEventListener('submit', async function (event) {
 });
 
 loadMoreBtn.addEventListener('click', async function () {
+  if (!navigator.onLine) {
+    gallery.innerHTML = '';
+    loadMoreBtn.classList.add('is-hidden');
+
+    iziToast.error({
+      title: 'Error',
+      message: 'No internet connection',
+      position: 'topRight',
+    });
+    return;
+  }
+
   const loadMoreLoader = document.getElementById('load-more-loader');
   loadMoreLoader.classList.remove('is-hidden');
-  loadMoreBtn.disabled = true;
+  loadMoreBtn.classList.add('is-hidden');
 
   try {
     const data = await getImages(searchText, currentPage + 1);
@@ -53,6 +66,11 @@ loadMoreBtn.addEventListener('click', async function () {
       loadMoreBtn.classList.add('is-hidden');
       displayEndMessage();
     }
+
+    loadMoreBtn.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+    });
   } catch (error) {
     console.error('Error during loading more images:', error);
     displayErrorMessage('Error loading more images');
@@ -84,14 +102,7 @@ function handleImageData(data) {
 
   displayImages(data.hits, gallery);
 
-  displayImages(data.hits, document.querySelector('.gallery'));
-
   const galleryItemHeight = document
     .querySelector('.card')
     .getBoundingClientRect().height;
-
-  window.scrollBy({
-    top: 2 * galleryItemHeight,
-    behavior: 'smooth',
-  });
 }
