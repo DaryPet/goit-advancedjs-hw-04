@@ -124,6 +124,16 @@ body {
   box-sizing: border-box;
   animation: animloader 1s linear infinite;
 }
+#loadMoreBtn {
+  margin: 10px 0;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  height: 40px;
+  width: 90px;
+}
 
 @keyframes animloader {
   0% {
