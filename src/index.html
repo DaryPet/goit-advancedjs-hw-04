@@ -4,23 +4,24 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vanilla App Template</title>
+    <title>Gallery</title>
     <link rel="stylesheet" href="./css/styles.css" />
     <meta />
   </head>
   <body>
-    <form id="search-form">
+    <form class="form" id="search-form">
       <input
         type="text"
-        id="search-input"
+        class="search-input"
         placeholder="Введіть ключове слово"
       />
       <button id="btn-form" type="submit">Пошук</button>
     </form>
-    <div id="loader" class="loader is-hidden">Loading...</div>
-    <div class="gallery"></div>
-    <button class="btn-load-more is-hidden">Load more</button>
-    <div id="load-more-loader" class="loader is-hidden">Loading...</div>
+    <span id="loader" class="loader">Loading...</span>
+    <ul class="gallery"></ul>
+    <span id="load-more-loader" class="loader is-hidden">Loading more...</span>
+    <button id="loadMoreBtn" class="is-hidden">Load More</button>
+
     <script type="module" src="./main.js"></script>
   </body>
 </html>

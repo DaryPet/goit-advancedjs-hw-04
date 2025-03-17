@@ -1,16 +1,16 @@
-import iziToast from 'izitoast';
-import 'izitoast/dist/css/iziToast.min.css';
+import iziToast from 'izitoast/dist/js/iziToast.min.js';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { getImages } from './js/pixabay-api.js';
 import { displayImages, displayErrorMessage } from './js/render-functions.js';
 import { PER_PAGE } from './js/pixabay-api.js';
 
-const form = document.querySelector('#search-form');
-const input = document.querySelector('#search-input');
+const form = document.querySelector('.form');
+const input = document.querySelector('.search-input');
 const gallery = document.querySelector('.gallery');
 const loader = document.getElementById('loader');
-const loadMoreBtn = document.querySelector('.btn-load-more');
+const loadMoreBtn = document.querySelector('#loadMoreBtn');
+
 let searchText = '';
 let currentPage = 1;
 
@@ -26,12 +26,24 @@ form.addEventListener('submit', async function (event) {
   input.value = '';
   loader.classList.remove('is-hidden');
 
-  gallery.innerHTML = '';
+  if (currentPage === 1) {
+    gallery.innerHTML = '';
+  }
 
   try {
-    const data = await getImages(searchText, 1);
+    const data = await getImages(searchText, currentPage);
     currentPage = 1;
-    handleImageData(data);
+    if (data.hits.length === 0) {
+      displayErrorMessage(
+        'Sorry, there are no images matching your search query. Please try again!'
+      );
+      return;
+    }
+
+    displayImages(data.hits, gallery);
+    if (data.totalHits > PER_PAGE) {
+      loadMoreBtn.classList.remove('is-hidden');
+    }
   } catch (error) {
     console.error('Error during search:', error);
     displayErrorMessage('Error during search');
@@ -102,7 +114,7 @@ function handleImageData(data) {
 
   displayImages(data.hits, gallery);
 
-  const galleryItemHeight = document
-    .querySelector('.card')
-    .getBoundingClientRect().height;
+  const galleryItemHeight =
+    document.querySelector('.gallery-item')?.getBoundingClientRect().height ||
+    200;
 }

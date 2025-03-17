@@ -6,7 +6,10 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 export function displayImages(images, gallery) {
   const imageElements = images
     .map(image => {
-      return ` <div class="card">
+      return ` 
+
+        <li class="gallery-item" >
+
          <a href="${image.webformatURL}"><img class="card-image" src="${image.webformatURL}" alt="${image.tags}" />
          <div class="card-info">
            <p>Likes: <span>${image.likes}</span></p>
@@ -14,7 +17,7 @@ export function displayImages(images, gallery) {
            <p>Comments: <span>${image.comments}</span></p>
            <p>Downloads:<span>${image.downloads}</span></p>
          </div></a>
-       </div> `;
+       </li> `;
     })
     .join('');
 
