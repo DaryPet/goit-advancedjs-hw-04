@@ -3,6 +3,10 @@ import 'izitoast/dist/css/iziToast.min.css';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
+export function clearGallery(gallery) {
+  gallery.innerHTML = '';
+}
+
 export function displayImages(images, gallery) {
   const imageElements = images
     .map(image => {

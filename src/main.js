@@ -2,7 +2,11 @@ import iziToast from 'izitoast/dist/js/iziToast.min.js';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { getImages } from './js/pixabay-api.js';
-import { displayImages, displayErrorMessage } from './js/render-functions.js';
+import {
+  displayImages,
+  displayErrorMessage,
+  clearGallery,
+} from './js/render-functions.js';
 import { PER_PAGE } from './js/pixabay-api.js';
 
 const form = document.querySelector('.form');
@@ -26,13 +30,14 @@ form.addEventListener('submit', async function (event) {
   input.value = '';
   loader.classList.remove('is-hidden');
 
-  if (currentPage === 1) {
-    gallery.innerHTML = '';
-  }
+  // if (currentPage === 1) {
+  //   gallery.innerHTML = '';
+  // }
+  clearGallery(gallery);
+  currentPage = 1;
 
   try {
     const data = await getImages(searchText, currentPage);
-    currentPage = 1;
     if (data.hits.length === 0) {
       displayErrorMessage(
         'Sorry, there are no images matching your search query. Please try again!'
